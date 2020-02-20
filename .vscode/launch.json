@@ -1,0 +1,18 @@
+/* launch.json */
+{
+    "version": "2.0.0",
+    "configurations": [
+
+        {
+            "name": "lldb123",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${workspaceFolder}/Main",
+            "args": [
+                "-o",
+                //"/Users/pulpan/Documents/C++/NumberPlateRecognition/IMG_7901.JPG"
+                "/Users/pulpan/Documents/C++/number_plate_recognition_SVM/samples/sample1.jpg"
+              ]
+        }
+    ]
+}
