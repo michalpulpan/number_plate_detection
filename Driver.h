@@ -34,6 +34,7 @@ class Driver {
 
     private:
         std::string inputFile_;
+        bool showSteps_;
 
 
 };

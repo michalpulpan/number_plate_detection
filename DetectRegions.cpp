@@ -200,8 +200,9 @@ vector<Plate> DetectRegions::segment(const cv::Mat &input){
 
             //Equalize cropped img
             cv::Mat resultGray;
-            cv::cvtColor(resultRes, resultGray, cv::COLOR_BGR2GRAY);
+            cv::cvtColor(resultRes, resultGray, cv::COLOR_BGR2GRAY); 
             cv::blur(resultGray, resultGray, cv::Size(3,3));
+
             resultGray = histeq(resultGray);
             
             plates.push_back(Plate(resultGray, mbr.boundingRect()));
