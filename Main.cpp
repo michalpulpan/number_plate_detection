@@ -31,7 +31,7 @@ int main(int argc, char** argv)
 
 
     Driver driver;
-    driver.Work(args);
+    driver.mainLoop(args);
 
 }
 

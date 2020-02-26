@@ -18,9 +18,10 @@ Struct for storing plateImg, Rect position
 struct Plate{
 
     Plate(){};
-    Plate(cv::Mat img, cv::Rect pos): img_(img), pos_(pos){};
+    Plate(cv::Mat img, cv::Rect pos, cv::RotatedRect rotRect): img_(img), pos_(pos), rotRect_(rotRect) {};
 
     cv::Rect pos_;
     cv::Mat img_;
+    cv::RotatedRect rotRect_;
 
 };

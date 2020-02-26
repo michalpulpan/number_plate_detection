@@ -9,9 +9,12 @@
             "request": "launch",
             "program": "${workspaceFolder}/Main",
             "args": [
-                "-o",
+                "-i_folder",
                 //"/Users/pulpan/Documents/C++/NumberPlateRecognition/IMG_7901.JPG"
-                "/Users/pulpan/Documents/C++/number_plate_recognition_SVM/samples/sample1.jpg"
+                //"/Users/pulpan/Documents/C++/number_plate_recognition_SVM/samples/sample6.jpg",
+                "/Users/pulpan/Documents/C++/number_plate_recognition_SVM/samples",
+                "-show-output"
+                //"--show-steps"
               ]
         }
     ]

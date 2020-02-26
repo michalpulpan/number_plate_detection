@@ -174,26 +174,49 @@ vector<Plate> DetectRegions::segment(const cv::Mat &input){
             {
                 cv::line(result, rect_points[j], rect_points[(j+1)%4], cv::Scalar(0,0,255), 1, 8);
             }
+
+            cv::Mat imgCrop2;
+            cv::Mat imHelp = result;
+            cv::getRectSubPix(imHelp, mbr.size, mbr.center, imgCrop2);
+            if(debug_){
+                cv::imshow("verifySizes", imgCrop2);
+                cv::waitKey();
+            }
+
             //get rot. matrix
             float r = (float)mbr.size.width / (float)mbr.size.height;
+            //cout << "r: " << r << endl;
             float angle = mbr.angle;
             if(r<1){
-                angle = 90+angle;
+                mbr.angle = 90+mbr.angle;
+                cv::swap(mbr.size.width, mbr.size.height);
+            //    r = (float)mbr.size.width / (float)mbr.size.height;
             }
-            cv::Mat rotationMatrix = cv::getRotationMatrix2D(mbr.center, angle, 1);
+            cout << "r: " << r << endl;
 
+            cv::Mat rotationMatrix = cv::getRotationMatrix2D(mbr.center, mbr.angle, 1);
+
+        
             //create and rotate image
             cv::Mat imgRotated;
             cv::warpAffine(input, imgRotated, rotationMatrix, input.size(), cv::INTER_CUBIC);
+            if(debug_){
+                cv::imshow("imgRotated", imgRotated);
+                cv::waitKey();
+            }
 
             //crop img
             cv::Size rectSize = mbr.size;
+            /*
             if(r<1){
                 cv::swap(rectSize.width, rectSize.height);
-            }
+            }*/
             cv::Mat imgCrop;
             cv::getRectSubPix(imgRotated, rectSize, mbr.center, imgCrop);
-
+            if(debug_){
+                cv::imshow("imgCrop", imgCrop);
+                cv::waitKey();
+            }
             cv::Mat resultRes;
             resultRes.create(33,144,CV_8UC3);
             cv::resize(imgCrop, resultRes, resultRes.size(), 0, 0, cv::INTER_CUBIC);
@@ -205,7 +228,7 @@ vector<Plate> DetectRegions::segment(const cv::Mat &input){
 
             resultGray = histeq(resultGray);
             
-            plates.push_back(Plate(resultGray, mbr.boundingRect()));
+            plates.push_back(Plate(resultGray, mbr.boundingRect(), mbr));
         }
     }
 
