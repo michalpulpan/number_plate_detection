@@ -33,7 +33,6 @@ class Driver {
 
         void mainLoop(const std::vector<std::string> &arguments);
 
-        void ParseArguments(const std::vector<std::string> &arguments);
 
 
 

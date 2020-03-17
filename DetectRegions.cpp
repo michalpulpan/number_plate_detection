@@ -1,14 +1,20 @@
-//NumberPlateRecognition using SVM
-
-//DetectRegions.cpp
-//Michal Půlpán
-
 /*
 
-main class for detecing regions on image,
-returns vector<Plate> from public function run which calls segment()
+Czech number plate detection 
+
+DetectRegions.cpp
+Michal Půlpán
+
+
+- Function "segment" tries to find vertical edges because car number plate has high density of them -> first step of heuristic approach
+                     uses floodfill algorithm to connect close regions and make few that might be plates
+                     controlles if these floodfill masks have approx size and ration that could signalise a number plate
+                     crops possible number plates out from photo
+                     returns vector of possible number plates
 
 */
+
+
 
 #include "DetectRegions.h"
 
@@ -84,7 +90,7 @@ vector<Plate> DetectRegions::segment(const cv::Mat &input){
                      1); //thickness of 1
 
     if(showSteps_){
-        cv::imshow("Blue_contours", result);
+        cv::imshow("Green_contours", result);
         cv::waitKey();
     }
 
@@ -143,7 +149,7 @@ vector<Plate> DetectRegions::segment(const cv::Mat &input){
             }
         }
         */
-/*
+        /*
         unsigned char *maskIt = (unsigned char*)(mask.data);
         
         for (size_t i = 0; i < mask.cols; i++)
@@ -185,14 +191,16 @@ vector<Plate> DetectRegions::segment(const cv::Mat &input){
 
             //get rot. matrix
             float r = (float)mbr.size.width / (float)mbr.size.height;
-            //cout << "r: " << r << endl;
+            if(showSteps_)
+                cout << "first r: " << r << endl;
             float angle = mbr.angle;
             if(r<1){
                 mbr.angle = 90+mbr.angle;
                 cv::swap(mbr.size.width, mbr.size.height);
             //    r = (float)mbr.size.width / (float)mbr.size.height;
             }
-            cout << "r: " << r << endl;
+            if(showSteps_)
+                cout << "second r: " << r << endl;
 
             cv::Mat rotationMatrix = cv::getRotationMatrix2D(mbr.center, mbr.angle, 1);
 

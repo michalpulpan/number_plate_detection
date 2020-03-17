@@ -1,12 +1,19 @@
-//NumberPlateRecognition using SVm
-
-//Driver.cpp
-//Michal Půlpán
-
 /*
 
-Loads image from arguments 
-Gets image, detects all possible regions and trains SVM
+Czech number plate detection 
+
+Driver.cpp
+Michal Půlpán
+
+
+- Command parser (two options how to  run program)
+    1) via interface
+        - starts after calling program with argument "run"
+    2) reads commands from arguments
+- Trains SVM
+- Calls DetectRegions.run which returns vector of possible plates
+- Verifies if it's a plate (via controling width and height ratio)
+- Draws filled rectangle to make number plate unreadable
 
 */
 
@@ -442,21 +449,6 @@ Mat Driver::Work( Ptr<SVM> svm, const Mat& input_img){
     
 }
 
-void Driver::ParseArguments(const vector<string> &arguments){
-
-    if(arguments[1] == "-o"){
-        inputFile_ = arguments[2];
-        
-    } else {
-        cout << "error: Wrong argument" <<endl;
-        exit(0);
-    }
-    if(arguments.size() >3 &&arguments[3] == "--show-steps"){
-        showSteps_ = true;
-    } else {
-        showSteps_ = false;
-    }
-}
 
 Mat Driver::DrawRotatedRect(const Mat& mat, const RotatedRect& rect ){
 
@@ -494,12 +486,10 @@ bool Driver::isItReallyAPlate(const Plate& plate){
 
     sort(contours.begin(), contours.end(), cmp);
   
-    vector<vector<Point> > contoursGreaterThen30;
 
     for(auto& contour : contours){
         if(contourArea(contour) > 30){
             Mat approx;
-            //contoursGreaterThen30.push_back(contour);
             double peri = arcLength(contour,true);
 
             approxPolyDP(contour, approx, 0.02*peri, true);
